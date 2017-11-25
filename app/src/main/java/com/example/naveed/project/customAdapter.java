@@ -5,12 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
 
 /**
  * Created by Naveed on 10/20/2017.
@@ -29,10 +25,10 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
         public ViewHolder(View itemView) {
 
             super(itemView);
-            ivPic= itemView.findViewById(R.id.pic);
-            ivStatus= itemView.findViewById(R.id.call_status);
-            tvName= itemView.findViewById(R.id.name);
-            tvDate= itemView.findViewById(R.id.time);
+//            ivPic= itemView.findViewById(R.id.pic);
+//            ivStatus= itemView.findViewById(R.id.call_status);
+//            tvName= itemView.findViewById(R.id.name);
+//            tvDate= itemView.findViewById(R.id.time);
 
 
         }
