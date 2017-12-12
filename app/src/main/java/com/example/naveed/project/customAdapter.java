@@ -92,7 +92,7 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
             ivStatus.setImageResource(R.drawable.miss);
         }
         if(conType.equals(outgoing)){
-            ivStatus.setImageResource(R.drawable.miss);
+            ivStatus.setImageResource(R.drawable.out);
         }
 
 
