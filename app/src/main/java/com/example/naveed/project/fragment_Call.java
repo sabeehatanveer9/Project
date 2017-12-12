@@ -35,18 +35,12 @@ public class fragment_Call extends Fragment {
     TextView callDetails;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_layout_call, container, false);
 
-//        Cursor mCursor = getActivity().managedQuery(CallLog.Calls.CONTENT_URI, null, null,
-//                null, null);
-
         callDetails = (TextView) view.findViewById(R.id.callLog);
-
-
-
-
 
         return view;
     }
@@ -54,7 +48,6 @@ public class fragment_Call extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         requestPermission();
     }
 
