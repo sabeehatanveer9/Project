@@ -1,6 +1,5 @@
 package com.example.naveed.project;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
@@ -38,11 +37,10 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
     private static final String outgoing= "OUTGOING";
     private static final String missed= "MISSED";
 
-    public customAdapter(Context mContext , int resource, int textViewResourceId, ArrayList<String> conNames) {
-
+    public customAdapter(Context mContext) {
+        this.mContext = mContext;
+        inflater = LayoutInflater.from(mContext);
     }
-
-
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -73,7 +71,7 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
         // Return a new holder instance
         final ViewHolder viewHolder = new ViewHolder(contactView);
 
-        Cursor curLog = CallLogHelper.getAllCallLogs(getContentResolver());
+        Cursor curLog = CallLogHelper.getCallLogs(mContext.getContentResolver());
         setCallLogs(curLog);
 
         return viewHolder;
