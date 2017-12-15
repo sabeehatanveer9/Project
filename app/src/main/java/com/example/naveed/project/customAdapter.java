@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,11 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
     public customAdapter(Context mContext) {
         this.mContext = mContext;
         inflater = LayoutInflater.from(mContext);
+        conNames = new ArrayList<String>();
+        conNumbers = new ArrayList<String>();
+        conTime = new ArrayList<String>();
+        conDate = new ArrayList<String>();
+        conType = new ArrayList<String>();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -52,11 +58,7 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
             tvName= itemView.findViewById(R.id.name);
             tvDate= itemView.findViewById(R.id.time);
 
-            conNames = new ArrayList<String>();
-            conNumbers = new ArrayList<String>();
-            conTime = new ArrayList<String>();
-            conDate = new ArrayList<String>();
-            conType = new ArrayList<String>();
+
 
 
         }
@@ -80,9 +82,10 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
-         ivPic.setImageResource(R.drawable.dp);
-         tvName.setText(conNames.get(i));
-         tvDate.setText(conDate.get(i));
+
+        ivPic.setImageResource(R.drawable.dp);
+        tvName.setText(conNames.get(i));
+        tvDate.setText(conDate.get(i));
         if(conType.equals(incoming)){
             ivStatus.setImageResource(R.drawable.in);
         }
@@ -97,36 +100,45 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
     }
 
     private void setCallLogs(Cursor curLog) {
-        while (curLog.moveToNext()) {
-            String callNumber = curLog.getString(curLog
-                    .getColumnIndex(android.provider.CallLog.Calls.NUMBER));
-            conNumbers.add(callNumber);
 
-            String callName = curLog
-                    .getString(curLog
-                            .getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME));
-            if (callName == null) {
-                conNames.add("Unknown");
-            } else
-                conNames.add(callName);
+        int count=curLog.getCount();
+        if(count<=0)
+        {
+            Toast.makeText(mContext, "Call Logs Empty", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            while (curLog.moveToNext()) {
+                String callNumber = curLog.getString(curLog
+                        .getColumnIndex(android.provider.CallLog.Calls.NUMBER));
+                conNumbers.add(callNumber);
 
-            String callDate = curLog.getString(curLog
-                    .getColumnIndex(android.provider.CallLog.Calls.DATE));
-            SimpleDateFormat formatter = new SimpleDateFormat(
-                    "dd-MMM-yyyy HH:mm");
-            String dateString = formatter.format(new Date(Long
-                    .parseLong(callDate)));
-            conDate.add(dateString);
+                String callName = curLog
+                        .getString(curLog
+                                .getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME));
+                if (callName == null) {
+                    conNames.add("Unknown");
+                } else
+                    conNames.add(callName);
 
-            String callType = curLog.getString(curLog
-                    .getColumnIndex(android.provider.CallLog.Calls.TYPE));
-            if (callType.equals("1")) {
-                conType.add("INCOMING");
-            } else
-                conType.add("OUTGOING");
+                String callDate = curLog.getString(curLog
+                        .getColumnIndex(android.provider.CallLog.Calls.DATE));
+                SimpleDateFormat formatter = new SimpleDateFormat(
+                        "dd-MMM-yyyy HH:mm");
+                String dateString = formatter.format(new Date(Long
+                        .parseLong(callDate)));
+                conDate.add(dateString);
 
-            String duration = curLog.getString(curLog.getColumnIndex(android.provider.CallLog.Calls.DURATION));
-            conTime.add(duration);
+                String callType = curLog.getString(curLog
+                        .getColumnIndex(android.provider.CallLog.Calls.TYPE));
+                if (callType.equals("1")) {
+                    conType.add("INCOMING");
+                } else
+                    conType.add("OUTGOING");
+
+                String duration = curLog.getString(curLog.getColumnIndex(android.provider.CallLog.Calls.DURATION));
+                conTime.add(duration);
+
+            }
 
         }
 
@@ -134,7 +146,8 @@ public class customAdapter  extends RecyclerView.Adapter<customAdapter.ViewHolde
 
     @Override
     public int getItemCount() {
-        return 10;
+        return conNames.size();
+
     }
 
 }
