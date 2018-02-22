@@ -1,13 +1,22 @@
 package com.example.naveed.project;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.text.DateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -16,9 +25,9 @@ import android.view.ViewGroup;
 
 public class fragment_Call extends Fragment {
 
+    private static final String TAG1 = "MYTAG";
     private RecyclerView recyclerView;
     //TextView callDetails;
-
 
 
     @Override
@@ -26,122 +35,82 @@ public class fragment_Call extends Fragment {
         View view = inflater.inflate(R.layout.recyclerview_layout, container, false);
 
         //callDetails = (TextView) view.findViewById(R.id.callLog);
-        recyclerView= view.findViewById(R.id.recycler_view);
-        customAdapter cAdapter = new customAdapter(getContext());
+        recyclerView = view.findViewById(R.id.recycler_view);
+        customAdapter cAdapter = new customAdapter(getContext(), getCallLogs());
         recyclerView.setAdapter(cAdapter);
-        RecyclerView.LayoutManager layoutManager= new LinearLayoutManager(getActivity());
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
 
         return view;
     }
 
-//    @Override
-//    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        requestPermission();
-//    }
+    public List<ModelCall> getCallLogs() {
+        List<ModelCall> list = new ArrayList<>();
+        // reading all data in descending order according to DATE
 //
-//    public StringBuilder getCallLogs()
-//    {
-//        // reading all data in descending order according to DATE
+//        String strOrder = CallLog.Calls.DATE + " ASC";
 //
-//        String strOrder = android.provider.CallLog.Calls.DATE + " DESC";
-//        Uri callUri = Uri.parse("content://call_log/calls");
-//        Cursor mCursor = getActivity().getContentResolver().query(callUri, null, null, null, strOrder);
+//        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+//        }
+//        Cursor mCursor = getActivity().getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, strOrder);
 //
 //
 //        // loop through cursor
 //
-//        int number = mCursor.getColumnIndex(CallLog.Calls.NUMBER);
+//        int name = mCursor.getColumnIndex(CallLog.Calls.CACHED_NAME);
 //        int date = mCursor.getColumnIndex(CallLog.Calls.DATE);
 //        int duration = mCursor.getColumnIndex(CallLog.Calls.DURATION);
 //        int type = mCursor.getColumnIndex(CallLog.Calls.TYPE);
 //
 //
-//        StringBuilder sb = new StringBuilder();
+//        mCursor.moveToFirst();
 //        while (mCursor.moveToNext()) {
-//            String phnumber = mCursor.getString(number);
-//            String callduration = mCursor.getString(duration);
-//            String calltype = mCursor.getString(type);
-//            String calldate = mCursor.getString(date);
-//            Date d = new Date(Long.valueOf(calldate));
-//            String callTypeStr = "";
-//            switch (Integer.parseInt(calltype)) {
-//                case CallLog.Calls.OUTGOING_TYPE:
-//                    callTypeStr = "Outgoing";
-//                    break;
-//                case CallLog.Calls.INCOMING_TYPE:
-//                    callTypeStr = "Incoming";
-//                    break;
-//                case CallLog.Calls.MISSED_TYPE:
-//                    callTypeStr = "Missed";
-//                    break;
-//            }
-//            sb.append("Phone number " + phnumber);
-//            sb.append(System.getProperty("line.separator"));
-//            sb.append("Call duration " + callduration);
-//            sb.append(System.getProperty("line.separator"));
-//            sb.append("Call type " + callTypeStr);
-//            sb.append(System.getProperty("line.separator"));
-//            sb.append("Call date " + d);
-//            sb.append("---------------------------");
-//            sb.append(System.getProperty("line.separator"));
+//            list.add(new ModelCall(mCursor.getString(name), mCursor.getString(date), mCursor.getString(type)));
+//
 //        }
-//        return sb;
-//
-//    }
-//    public void requestPermission() {
-//
-//        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CALL_LOG)) {
-//                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
-//                dialog.setTitle("Your Permission Required");
-//                dialog.setMessage("Some decoding needs respective of your calls ");
-//                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-//                    }
-//                });
-//                dialog.setNegativeButton("Do not Want", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialogInterface, int i) {
-//                        Toast.makeText(getActivity(),"User is King!",Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//                dialog.show();
-//
-//
-//            } else {
-//                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
-//            }
-//        }
-//        else
-//        {
-//            callDetails.setText(getCallLogs().toString());
-//        }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if(requestCode==1)
-//        {
-//            if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED)
-//            {
-//                getCallLogs();
-//            }
-//            else if(grantResults[0]==PackageManager.PERMISSION_DENIED)
-//            {
-//                callDetails.setText("Permission Index 0");
-//            }
-//        }
-//    }
-//
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        super.onCreateOptionsMenu(menu, inflater);
-//
-//    }
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALL_LOG}, 1);
+
+        }
+        Cursor cursor = getActivity().getContentResolver().query(
+                android.provider.CallLog.Calls.CONTENT_URI, null, null, null,
+                android.provider.CallLog.Calls.DATE + " DESC ");
+//        Log.d(TAG1, "getCallLogs: "+ list.get(0).getName());
+
+
+        int numberColumnId = cursor.getColumnIndex(android.provider.CallLog.Calls.NUMBER);
+        int durationId = cursor.getColumnIndex(android.provider.CallLog.Calls.DURATION);
+        int contactNameId = cursor.getColumnIndex(android.provider.CallLog.Calls.CACHED_NAME);
+        int dateId = cursor.getColumnIndex(android.provider.CallLog.Calls.DATE);
+        int numTypeId = cursor.getColumnIndex(android.provider.CallLog.Calls.CACHED_NUMBER_TYPE);
+
+        Date dt = new Date();
+        int hours = dt.getHours();
+        int minutes = dt.getMinutes();
+        int seconds = dt.getSeconds();
+        String currTime = hours + ":" + minutes + ":" + seconds;
+
+        ArrayList<String> callList = new ArrayList<String>();
+        if (cursor.moveToFirst()) {
+
+            do {
+
+
+                String contactNumber = cursor.getString(numberColumnId);
+                String contactName = cursor.getString(contactNameId);
+                String duration = cursor.getString(durationId);
+                String callDate = DateFormat.getDateInstance().format(dateId);
+
+                String numType = cursor.getString(numTypeId);
+
+                list.add(new ModelCall(contactName,callDate));
+
+            } while (cursor.moveToNext());
+
+
+        }
+        return list;
+    }
 }
